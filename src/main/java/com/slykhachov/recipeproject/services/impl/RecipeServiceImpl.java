@@ -6,6 +6,7 @@ import com.slykhachov.recipeproject.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -24,5 +25,16 @@ public class RecipeServiceImpl implements RecipeService {
         log.debug("DEBUG MESSAGE");
         return StreamSupport.stream(recipeRepository.findAll().spliterator(), false)
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Recipe findById(Long id) {
+
+        Optional<Recipe> recipeOptional = recipeRepository.findById(id);
+
+        if (!recipeOptional.isPresent()) {
+            throw new RuntimeException("Recipe Not Found!");
+        }
+        return recipeOptional.get();
     }
 }
