@@ -4,6 +4,7 @@ import com.slykhachov.recipeproject.commands.RecipeCommand;
 import com.slykhachov.recipeproject.converters.RecipeCommandToRecipe;
 import com.slykhachov.recipeproject.converters.RecipeToRecipeCommand;
 import com.slykhachov.recipeproject.domain.Recipe;
+import com.slykhachov.recipeproject.exceptions.NotFoundException;
 import com.slykhachov.recipeproject.repositories.RecipeRepository;
 import com.slykhachov.recipeproject.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,9 @@ public class RecipeServiceImpl implements RecipeService {
     private final RecipeCommandToRecipe recipeCommandToRecipe;
     private final RecipeToRecipeCommand recipeToRecipeCommand;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeCommandToRecipe recipeCommandToRecipe, RecipeToRecipeCommand recipeToRecipeCommand) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository,
+                             RecipeCommandToRecipe recipeCommandToRecipe,
+                             RecipeToRecipeCommand recipeToRecipeCommand) {
         this.recipeRepository = recipeRepository;
         this.recipeCommandToRecipe = recipeCommandToRecipe;
         this.recipeToRecipeCommand = recipeToRecipeCommand;
@@ -41,7 +44,8 @@ public class RecipeServiceImpl implements RecipeService {
         Optional<Recipe> recipeOptional = recipeRepository.findById(id);
 
         if (!recipeOptional.isPresent()) {
-            throw new RuntimeException("Recipe Not Found!");
+            //throw new RuntimeException("Recipe Not Found!");
+            throw new NotFoundException("Recipe not found");
         }
         return recipeOptional.get();
     }

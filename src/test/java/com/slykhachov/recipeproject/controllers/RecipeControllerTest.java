@@ -2,6 +2,7 @@ package com.slykhachov.recipeproject.controllers;
 
 import com.slykhachov.recipeproject.commands.RecipeCommand;
 import com.slykhachov.recipeproject.domain.Recipe;
+import com.slykhachov.recipeproject.exceptions.NotFoundException;
 import com.slykhachov.recipeproject.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,6 +77,15 @@ public class RecipeControllerTest {
         )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/2/show"));
+    }
+
+    @Test
+    public void testGetRecipeNotFound() throws Exception {
+
+        when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/1/show"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
